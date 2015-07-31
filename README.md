@@ -45,4 +45,4 @@ If you don't pass ``--template`` to the ``build`` command, it will use the ``pod
 
 Build should be done very quickly. It will generate the podcast site and rss, put them into ``build``, then push all the changes under ``build`` to ``gh-pages``. You shall then see the generated site in less than a minute. Meanwhile, your itunes podcast app shall get the latest rss. Try it and have fun!
 
-![Place hold for my awesome programmer_life podcast](https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=600&h=400)
+![Place hold for my awesome programmer_life podcast](http://placehold.it/600x400)
