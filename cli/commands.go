@@ -7,7 +7,7 @@ import (
 
 	"github.com/mitchellh/cli"
 
-	"github.com/tyrchen/podgen/cli/command"
+	"podgen/cli/command"
 )
 
 // Commands returns the mapping of CLI commands. The meta

@@ -11,7 +11,7 @@ import (
 	// "github.com/andjosh/gopod"
 	"gopkg.in/yaml.v2"
 
-	"github.com/tyrchen/podgen/cli"
+	"podgen/cli"
 )
 
 type Item struct {

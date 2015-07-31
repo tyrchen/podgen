@@ -38,8 +38,8 @@ func HelpFunc(commands map[string]cli.CommandFactory) string {
 	buf.WriteString("usage: podgen [-version] [-help] <command> [args]\n\n")
 	buf.WriteString("Common commands:\n")
 	buf.WriteString(listCommands(commonCommands, maxKeyLen))
-	buf.WriteString("\nAll other commands:\n")
-	buf.WriteString(listCommands(otherCommands, maxKeyLen))
+	// buf.WriteString("\nAll other commands:\n")
+	// buf.WriteString(listCommands(otherCommands, maxKeyLen))
 	return buf.String()
 }
 
