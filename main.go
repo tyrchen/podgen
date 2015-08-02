@@ -3,15 +3,15 @@ package main
 import (
 	// "fmt"
 	"log"
-	"os"
+	// "os"
 	// "time"
 
 	"io/ioutil"
 
 	// "github.com/andjosh/gopod"
 	"gopkg.in/yaml.v2"
-
-	"podgen/cli"
+	"podgen/commands"
+	"runtime"
 )
 
 type Item struct {
@@ -45,5 +45,6 @@ func GetChannelData(filename string) (channel Channel) {
 }
 
 func main() {
-	os.Exit(cli.Run(os.Args[1:]))
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	commands.Execute()
 }

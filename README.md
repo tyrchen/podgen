@@ -4,7 +4,7 @@
 
 Podgen is a tool for statically generate a podcast site with itunes enabled rss. After putting your generated online, you could register your rss against itunes podcast so that your awesome voice could be reached everywhere.
 
-This project is highly inspired by go projects from hashicorp. The ``./scripts`` is from **consul** and the CLI is modified based on **vault**.
+This project is highly inspired by go projects from hashicorp. The ``./scripts`` is from **consul** and the CLI is modified based on **vault** (this is not true anymore, now the CLI is using github.com/spf13/cobra).
 
 ## Installation
 
