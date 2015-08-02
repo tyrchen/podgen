@@ -15,7 +15,7 @@ import (
 var (
 	template_repo  string
 	originUrl      string
-	FILES_TO_CHECK = []string{"channel.yml", "items.yml", "build", "assets", "template"}
+	FILES_TO_CHECK = []string{"channel.yml", "items.yml", "build", ASSETS_PATH, TEMPLATE_PATH, "CNAME"}
 )
 
 var initCmd = &cobra.Command{
@@ -52,9 +52,9 @@ func init() {
 
 func getTemplate() {
 	session := sh.NewSession()
-	session.Command("git", "clone", "--depth=1", template_repo, DEST_PATH).Run()
+	session.Command("git", "clone", "--depth=1", template_repo, TEMPLATE_PATH).Run()
 	removeFiles(session, ".git")
-	mvFiles(session, "channel.yml", "items.yml", "assets", ".gitignore")
+	mvFiles(session, "channel.yml", "items.yml", ASSETS_PATH, ".gitignore", "CNAME")
 	gitCommit(session, "initial podcast site", "master", true)
 }
 
@@ -70,24 +70,24 @@ func createGhPages() {
 
 	session.Command("git", "clone", "-b", GH_PAGES, originUrl, "build").Run()
 
-	cpFiles(session, TARGET_PATH, "css", "font-awesome", "fonts", "img", "js")
+	cpFiles(session, TEMPLATE_PATH, TARGET_PATH, "css", "font-awesome", "fonts", "img", "js")
 }
 
 func removeFiles(session *sh.Session, files ...string) {
 	for _, filename := range files {
-		session.Command("rm", "-rf", fmt.Sprintf("%s/%s", DEST_PATH, filename)).Run()
+		session.Command("rm", "-rf", fmt.Sprintf("%s/%s", TEMPLATE_PATH, filename)).Run()
 	}
 }
 
 func mvFiles(session *sh.Session, files ...string) {
 	for _, filename := range files {
-		session.Command("mv", fmt.Sprintf("%s/%s", DEST_PATH, filename), ".").Run()
+		session.Command("mv", fmt.Sprintf("%s/%s", TEMPLATE_PATH, filename), ".").Run()
 	}
 }
 
-func cpFiles(session *sh.Session, dest string, files ...string) {
+func cpFiles(session *sh.Session, src string, dest string, files ...string) {
 	for _, filename := range files {
-		session.Command("cp", "-r", fmt.Sprintf("%s/%s", DEST_PATH, filename), dest).Run()
+		session.Command("cp", "-r", fmt.Sprintf("%s/%s", src, filename), dest).Run()
 	}
 }
 

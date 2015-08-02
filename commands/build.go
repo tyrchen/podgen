@@ -13,6 +13,7 @@ import (
 	"gopkg.in/yaml.v2"
 
 	"github.com/andjosh/gopod"
+	"github.com/codeskyblue/go-sh"
 	"github.com/spf13/cobra"
 
 	"podgen/utils"
@@ -62,6 +63,9 @@ var buildCmd = &cobra.Command{
 
 func execute() {
 	generatePages()
+	session := sh.NewSession()
+	cpFiles(session, ".", TARGET_PATH, "assets", "CNAME")
+	cpFiles(session, TEMPLATE_PATH, TARGET_PATH, "css", "font-awesome", "fonts", "img", "js")
 }
 
 func generatePages() {
@@ -79,9 +83,9 @@ func generatePages() {
 		pages[i-1] = i
 	}
 
-	data, _ := ioutil.ReadFile(fmt.Sprintf("%s/index.tmpl", DEST_PATH))
+	data, _ := ioutil.ReadFile(fmt.Sprintf("%s/index.tmpl", TEMPLATE_PATH))
 	content := string(data[:])
-	funcs := template.FuncMap{"alt": alt}
+	funcs := template.FuncMap{"alt": alt, "trunc": truncate}
 	t := template.Must(template.New("Podgen").Funcs(funcs).Parse(content))
 
 	for i := 1; i <= len_chopped_items; i++ {
@@ -110,7 +114,8 @@ func generatePages() {
 }
 
 func generateRss(channel Channel, items []Item) {
-	c := gopod.ChannelFactory(channel.Title, channel.Link, channel.Description, channel.Image)
+	imageUrl := path.Join(channel.Link, ASSETS_PATH, channel.Image)
+	c := gopod.ChannelFactory(channel.Title, channel.Link, channel.Description, imageUrl)
 	c.SetiTunesExplicit("No")
 	c.SetCopyright(channel.Copyright)
 	c.SetiTunesAuthor(channel.Author)
@@ -119,7 +124,7 @@ func generateRss(channel Channel, items []Item) {
 	c.SetLanguage(channel.Language)
 
 	for _, item := range items {
-		url := path.Join(c.Link, "assets", item.Link)
+		url := path.Join(c.Link, ASSETS_PATH, item.Link)
 		enclosure := gopod.Enclosure{
 			Url:    url,
 			Length: "0",
@@ -164,6 +169,12 @@ func getItemData(filename string) (items []Item) {
 	if err != nil {
 		log.Fatalf("Cannot parse file %s (%s)", filename, err)
 	}
+
+	// ugly reverse - I'm seeking something like list.reverse() in python but not found.
+	for i, j := 0, len(items)-1; i < j; i, j = i+1, j-1 {
+		items[i], items[j] = items[j], items[i]
+	}
+
 	return
 }
 
@@ -183,6 +194,15 @@ func alt(x int) string {
 		return "a"
 	} else {
 		return "b"
+	}
+}
+
+func truncate(str string) string {
+	data := []rune(str)
+	if len(data) <= MAX_DESCRIPTION {
+		return str
+	} else {
+		return string(data[:MAX_DESCRIPTION-1]) + "..."
 	}
 }
 

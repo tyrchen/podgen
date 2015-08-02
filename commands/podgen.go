@@ -5,10 +5,12 @@ import (
 )
 
 const (
-	DEFAULT_TMPL = "https://github.com/tyrchen/podgen-basic"
-	DEST_PATH    = "template"
-	GH_PAGES     = "gh-pages"
-	TARGET_PATH  = "build"
+	DEFAULT_TMPL    = "https://github.com/tyrchen/podgen-basic"
+	TEMPLATE_PATH   = "template"
+	GH_PAGES        = "gh-pages"
+	TARGET_PATH     = "build"
+	ASSETS_PATH     = "assets"
+	MAX_DESCRIPTION = 132
 )
 
 // Root command
