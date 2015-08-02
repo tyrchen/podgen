@@ -4,6 +4,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	DEFAULT_TMPL = "https://github.com/tyrchen/podgen-basic"
+	DEST_PATH    = "template"
+	GH_PAGES     = "gh-pages"
+	TARGET_PATH  = "build"
+)
+
 // Root command
 var PodgenCmd = &cobra.Command{
 	Use:   "podgen",

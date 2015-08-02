@@ -1,13 +1,9 @@
 package commands
 
 import (
-	// "bytes"
 	"fmt"
-	// "log"
 	"os"
-	// "path/filepath"
 	"strings"
-	// "time"
 
 	"github.com/codeskyblue/go-sh"
 	"github.com/spf13/cobra"
@@ -16,16 +12,10 @@ import (
 	"podgen/utils"
 )
 
-const (
-	DEFAULT_TMPL = "https://github.com/tyrchen/podgen-basic"
-	DEST_PATH    = "template"
-	GH_PAGES     = "gh-pages"
-)
-
 var (
-	template       string
+	template_repo  string
 	originUrl      string
-	FILES_TO_CHECK = []string{"channel.yml", "items.yml", "build", "music", "template"}
+	FILES_TO_CHECK = []string{"channel.yml", "items.yml", "build", "assets", "template"}
 )
 
 var initCmd = &cobra.Command{
@@ -35,40 +25,36 @@ var initCmd = &cobra.Command{
 Configuration files and site `,
 	Run: func(cmd *cobra.Command, args []string) {
 		originUrl = getOriginUrl()
-		fmt.Printf("Current repo is %s, You're using template: %s\n", originUrl, template)
-		execute()
+		fmt.Printf("Current repo is %s, You're using template: %s\n", originUrl, template_repo)
+		if !utils.Exists("./.git") {
+			fmt.Printf("'.git' is not found. Please create an empty github repo, clone it to you local directory and then run this command under the directory.")
+			os.Exit(-1)
+		}
+
+		for _, filename := range FILES_TO_CHECK {
+			if utils.Exists(filename) {
+				fmt.Printf("Hmm...found existing '%s' - seems you're on an already initialized podcast directory. I cannot init it again.", filename)
+				os.Exit(-1)
+			}
+		}
+		getTemplate()
+		createGhPages()
+
+		fmt.Println("\nCongratulations, your podcast site is ready to use. Please modify the *.yml files and try to 'podgen build' your site!\n")
 	},
 }
 
 func init() {
-	initCmd.Flags().StringVarP(&template, "template", "t", DEFAULT_TMPL, "Content type to create")
+	initCmd.Flags().StringVarP(&template_repo, "template", "t", DEFAULT_TMPL, "Content type to create")
 }
 
 // command implementation
 
-func execute() {
-	if !utils.Exists("./.git") {
-		fmt.Printf("'.git' is not found. Please create an empty github repo, clone it to you local directory and then run this command under the directory.")
-		os.Exit(-1)
-	}
-
-	for _, filename := range FILES_TO_CHECK {
-		if utils.Exists(filename) {
-			fmt.Printf("Hmm...found existing '%s' - seems you're on an already initialized podcast directory. I cannot init it again.", filename)
-			os.Exit(-1)
-		}
-	}
-	getTemplate()
-	createGhPages()
-
-	fmt.Println("\nCongratulations, your podcast site is ready to use. Please modify the *.yml files and try to 'podgen build' your site!\n")
-}
-
 func getTemplate() {
 	session := sh.NewSession()
-	session.Command("git", "clone", "--depth=1", template, DEST_PATH).Run()
+	session.Command("git", "clone", "--depth=1", template_repo, DEST_PATH).Run()
 	removeFiles(session, ".git")
-	mvFiles(session, "channel.yml", "items.yml", "music", ".gitignore")
+	mvFiles(session, "channel.yml", "items.yml", "assets", ".gitignore")
 	gitCommit(session, "initial podcast site", "master", true)
 }
 
@@ -83,6 +69,8 @@ func createGhPages() {
 	session.Command("git", "checkout", "master").Run()
 
 	session.Command("git", "clone", "-b", GH_PAGES, originUrl, "build").Run()
+
+	cpFiles(session, TARGET_PATH, "css", "font-awesome", "fonts", "img", "js")
 }
 
 func removeFiles(session *sh.Session, files ...string) {
@@ -94,6 +82,12 @@ func removeFiles(session *sh.Session, files ...string) {
 func mvFiles(session *sh.Session, files ...string) {
 	for _, filename := range files {
 		session.Command("mv", fmt.Sprintf("%s/%s", DEST_PATH, filename), ".").Run()
+	}
+}
+
+func cpFiles(session *sh.Session, dest string, files ...string) {
+	for _, filename := range files {
+		session.Command("cp", "-r", fmt.Sprintf("%s/%s", DEST_PATH, filename), dest).Run()
 	}
 }
 

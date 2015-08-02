@@ -8,7 +8,7 @@ import (
 
 	"io/ioutil"
 
-	// "github.com/andjosh/gopod"
+	//
 	"gopkg.in/yaml.v2"
 	"podgen/commands"
 	"runtime"
