@@ -7,24 +7,26 @@ import (
 	"log"
 	"math"
 	"os"
-	"path"
 	"strings"
 
 	"gopkg.in/yaml.v2"
 
 	"github.com/andjosh/gopod"
 	"github.com/codeskyblue/go-sh"
+	"github.com/satori/go.uuid"
 	"github.com/spf13/cobra"
 
 	"podgen/utils"
+	"time"
 )
 
 type Item struct {
 	Title       string
 	Description string
 	Link        string
-	PubDate     string
+	Pubdate     string
 	Image       string
+	Guid        string
 }
 
 type Channel struct {
@@ -50,6 +52,8 @@ type PageTemplate struct {
 	Paginator template.HTML
 }
 
+var generated_guid bool
+
 var buildCmd = &cobra.Command{
 	Use:   "build",
 	Short: "build the podcast site",
@@ -66,6 +70,11 @@ func execute() {
 	session := sh.NewSession()
 	cpFiles(session, ".", TARGET_PATH, "assets", "CNAME")
 	cpFiles(session, TEMPLATE_PATH, TARGET_PATH, "css", "font-awesome", "fonts", "img", "js")
+	if generated_guid {
+		fmt.Println("Build finished. Please copy guid: <guid_value> to your items.yml for each episode.")
+	} else {
+		fmt.Println("Build finished.")
+	}
 }
 
 func generatePages() {
@@ -114,7 +123,7 @@ func generatePages() {
 }
 
 func generateRss(channel Channel, items []Item) {
-	imageUrl := path.Join(channel.Link, ASSETS_PATH, channel.Image)
+	imageUrl := utils.Urljoin(channel.Link, ASSETS_PATH, channel.Image)
 	c := gopod.ChannelFactory(channel.Title, channel.Link, channel.Description, imageUrl)
 	c.SetiTunesExplicit("No")
 	c.SetCopyright(channel.Copyright)
@@ -124,20 +133,34 @@ func generateRss(channel Channel, items []Item) {
 	c.SetLanguage(channel.Language)
 
 	for _, item := range items {
-		url := path.Join(c.Link, ASSETS_PATH, item.Link)
+		url := utils.Urljoin(c.Link, ASSETS_PATH, item.Link)
 		enclosure := gopod.Enclosure{
 			Url:    url,
 			Length: "0",
 			Type:   "audio/mpeg",
 		}
+		pubdate, err := time.Parse(time.RFC3339, item.Pubdate)
+		utils.CheckError(err)
+		var guid string
+		description := truncate(item.Description)
+		if item.Guid != "" {
+			guid = item.Guid
+		} else {
+			generated_guid = true
+			guid = uuid.NewV4().String()
+			fmt.Printf("%s -  guid: %s\n", item.Link, guid)
+
+		}
+
 		c.AddItem(&gopod.Item{
 			Title:         item.Title,
 			Link:          url,
-			Description:   item.Description,
-			PubDate:       item.PubDate,
+			Description:   description,
+			PubDate:       pubdate.Format(time.RFC1123),
+			Guid:          guid,
 			TunesAuthor:   channel.Author,
-			TunesSubtitle: item.Description,
-			TunesSummary:  item.Description,
+			TunesSubtitle: description,
+			TunesSummary:  description,
 			Enclosure:     []*gopod.Enclosure{&enclosure},
 		})
 	}

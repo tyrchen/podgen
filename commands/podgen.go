@@ -10,7 +10,7 @@ const (
 	GH_PAGES        = "gh-pages"
 	TARGET_PATH     = "build"
 	ASSETS_PATH     = "assets"
-	MAX_DESCRIPTION = 132
+	MAX_DESCRIPTION = 96
 )
 
 // Root command
