@@ -6,13 +6,17 @@ This project is highly inspired by go projects from hashicorp. The ``./scripts``
 
 ## Installation
 
-For Mac OSX, the easiest way to install it is through homebrew:
+For Mac OSX, the easiest way to download the current [release](https://github.com/tyrchen/podgen/releases/download/v0.2.0/podgen) from [tyrchen/podgen release](https://github.com/tyrchen/podgen/releases).
+
+Later on we will support homebrew so that you could install directly with:
 
 ```
 $ brew install podgen
 ```
 
-You can also download the compiled version from github.
+For linux user, please download source code and compile it yourself.
+
+podgen doesn't support windows at this stage. I will finish all the functionalities then consider windows support. Sorry.
 
 ## Usage
 
@@ -21,28 +25,39 @@ To use podgen, first of all, you need to init a site:
 ```
 $ mkdir programmer_life
 $ cd programmer_life
-$ podgen init
+$ podgen init [--template github.com/tyrchen/podgen-basic]
 ```
+
+[note] If you don't pass ``--template`` to the ``init`` command, it will use the ``tyrchen/podgen-basic`` template from github.
 
 It will create configuration files for you to use:
 
 ```
 $ ls
-build     CNAME     channel.yml     items.yml   music
+build     CNAME     channel.yml     items.yml   assets template
 ```
 
 And it will create a ``gh-pages`` branch to store the build target. Just same as any other github powered static site.
 
-Then edit ``channel.yml`` to put your channel information and add your podcast items into ``items.yml``. Finally copy your mp3 into ``music`` folder. You're almost set! Ah, if you want to use it against your customer domain, set the ``CNAME`` file!
+Then edit ``channel.yml`` to put your channel information and add your podcast items into ``items.yml``. Finally copy your mp3 into ``assets`` folder. You're almost set! Ah, if you want to use it against your customer domain, set the ``CNAME`` file!
 
 The last step is to build the project:
 
 ```
-$ podgen build [--template github.com/tyrchen/podgen-basic]
+$ podgen build
 ```
 
-If you don't pass ``--template`` to the ``build`` command, it will use the ``podgen-basic`` template from github. The downloaded template is cached locally in ``~/.podgen/github.com/tyrchen/podgen-basic`` in case you need to use it next time.
+Build should be done very quickly. It will generate the podcast site and rss, put them into ``build``, then push all the changes under ``build`` to ``gh-pages``. You shall then see the generated site in less than a minute.
 
-Build should be done very quickly. It will generate the podcast site and rss, put them into ``build``, then push all the changes under ``build`` to ``gh-pages``. You shall then see the generated site in less than a minute. Meanwhile, your itunes podcast app shall get the latest rss. Try it and have fun!
+If everything looks fine. You just need to issue "podgen push" to push the source and generated html to ``master`` and ``gh-pages``.
 
-![Place hold for my awesome programmer_life podcast](http://placehold.it/600x400)
+```
+$ podgen push -m "add a new episode"
+```
+
+Meanwhile, your itunes podcast app shall get the latest rss. Try it and have fun!
+
+You can always welcome to view a live demo of my podcast site:
+
+
+[![programmer_life podcast](http://podcast.tchen.me/assets/cover.jpg)](http://podcast.tchen.me)
