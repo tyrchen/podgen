@@ -57,7 +57,4 @@ $ podgen push -m "add a new episode"
 
 Meanwhile, your itunes podcast app shall get the latest rss. Try it and have fun!
 
-You can always welcome to view a live demo of my podcast site:
-
-
-[![programmer_life podcast](http://podcast.tchen.me/assets/cover.jpg)](http://podcast.tchen.me)
+You can always welcome to view a live demo of my podcast site: [programmer life](http://podcast.tchen.me)
