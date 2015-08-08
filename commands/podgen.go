@@ -11,6 +11,7 @@ const (
 	TARGET_PATH     = "build"
 	ASSETS_PATH     = "assets"
 	MAX_DESCRIPTION = 96
+	DEFAULT_PORT    = 6060
 )
 
 // Root command

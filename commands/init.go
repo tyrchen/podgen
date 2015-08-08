@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -25,22 +26,22 @@ var initCmd = &cobra.Command{
 Configuration files and site `,
 	Run: func(cmd *cobra.Command, args []string) {
 		originUrl = getOriginUrl()
-		fmt.Printf("Current repo is %s, You're using template: %s\n", originUrl, template_repo)
+		log.Printf("Current repo is %s, You're using template: %s\n", originUrl, template_repo)
 		if !utils.Exists("./.git") {
-			fmt.Printf("'.git' is not found. Please create an empty github repo, clone it to you local directory and then run this command under the directory.")
+			log.Printf("'.git' is not found. Please create an empty github repo, clone it to you local directory and then run this command under the directory.")
 			os.Exit(-1)
 		}
 
 		for _, filename := range FILES_TO_CHECK {
 			if utils.Exists(filename) {
-				fmt.Printf("Hmm...found existing '%s' - seems you're on an already initialized podcast directory. I cannot init it again.", filename)
+				log.Printf("Hmm...found existing '%s' - seems you're on an already initialized podcast directory. I cannot init it again.", filename)
 				os.Exit(-1)
 			}
 		}
 		getTemplate()
 		createGhPages()
 
-		fmt.Println("\nCongratulations, your podcast site is ready to use. Please modify the *.yml files and try to 'podgen build' your site!\n")
+		log.Println("\nCongratulations, your podcast site is ready to use. Please modify the *.yml files and try to 'podgen build' your site!\n")
 	},
 }
 
@@ -106,7 +107,7 @@ func getOriginUrl() string {
 	originUrl, err := gitconfig.OriginURL()
 	utils.CheckError(err)
 	if !strings.HasPrefix(originUrl, "git@") {
-		fmt.Printf("Please clone the repo with SSL clone URL. Otherwise the repo cannot be modified (Origin url is %s in .git/config)\n", originUrl)
+		log.Printf("Please clone the repo with SSL clone URL. Otherwise the repo cannot be modified (Origin url is %s in .git/config)\n", originUrl)
 		os.Exit(-1)
 	}
 	return originUrl

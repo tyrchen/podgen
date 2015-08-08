@@ -71,9 +71,9 @@ func execute() {
 	cpFiles(session, ".", TARGET_PATH, "assets", "CNAME")
 	cpFiles(session, TEMPLATE_PATH, TARGET_PATH, "css", "font-awesome", "fonts", "img", "js")
 	if generated_guid {
-		fmt.Println("Build finished. Please copy guid: <guid_value> to your items.yml for each episode.")
+		log.Println("Build finished. Please copy guid: <guid_value> to your items.yml for each episode.")
 	} else {
-		fmt.Println("Build finished.")
+		log.Println("Build finished.")
 	}
 }
 
@@ -148,7 +148,7 @@ func generateRss(channel Channel, items []Item) {
 		} else {
 			generated_guid = true
 			guid = uuid.NewV4().String()
-			fmt.Printf("%s -  guid: %s\n", item.Link, guid)
+			log.Printf("%s -  guid: %s\n", item.Link, guid)
 
 		}
 
