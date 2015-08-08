@@ -11,10 +11,10 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/andjosh/gopod"
 	"github.com/codeskyblue/go-sh"
 	"github.com/satori/go.uuid"
 	"github.com/spf13/cobra"
+	"github.com/tyrchen/gopod"
 
 	"podgen/utils"
 	"time"
@@ -152,7 +152,7 @@ func generateRss(channel Channel, items []Item) {
 
 		}
 
-		c.AddItem(&gopod.Item{
+		episode := gopod.Item{
 			Title:         item.Title,
 			Link:          url,
 			Description:   description,
@@ -162,7 +162,11 @@ func generateRss(channel Channel, items []Item) {
 			TunesSubtitle: description,
 			TunesSummary:  description,
 			Enclosure:     []*gopod.Enclosure{&enclosure},
-		})
+		}
+
+		episode.SetTunesImage(utils.Urljoin(channel.Link, ASSETS_PATH, item.Image))
+
+		c.AddItem(&episode)
 	}
 	f, err := os.Create(fmt.Sprintf("%s/%s", TARGET_PATH, "rss.xml"))
 	utils.CheckError(err)
