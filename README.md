@@ -6,7 +6,7 @@ This project is highly inspired by go projects from hashicorp. The ``./scripts``
 
 ## Installation
 
-For Mac OSX, the easiest way to download the current [release](https://github.com/tyrchen/podgen/releases/download/v0.2.0/podgen) from [tyrchen/podgen release](https://github.com/tyrchen/podgen/releases).
+For Mac OSX, the easiest way to download the current [release](https://github.com/tyrchen/podgen/releases/download/v0.3.0/podgen) from [tyrchen/podgen release](https://github.com/tyrchen/podgen/releases).
 
 Later on we will support homebrew so that you could install directly with:
 
