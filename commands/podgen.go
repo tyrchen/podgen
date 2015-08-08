@@ -41,6 +41,6 @@ Complete documentation is available at http://github.com/tyrchen/podgen.`,
 }
 
 func Execute() {
-	PodgenCmd.AddCommand(initCmd, buildCmd, serverCmd, pushCmd)
+	PodgenCmd.AddCommand(initCmd, buildCmd, serverCmd, pushCmd, newCmd)
 	PodgenCmd.Execute()
 }
