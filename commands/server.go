@@ -14,7 +14,7 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/fsnotify.v1"
 
-	"podgen/utils"
+	"github.com/tyrchen/podgen/utils"
 )
 
 var (

@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/tcnksm/go-gitconfig"
 
-	"podgen/utils"
+	"github.com/tyrchen/podgen/utils"
 )
 
 var (

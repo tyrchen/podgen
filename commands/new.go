@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"podgen/utils"
+	"github.com/tyrchen/podgen/utils"
 )
 
 const (

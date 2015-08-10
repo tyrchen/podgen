@@ -9,8 +9,8 @@ import (
 	"io/ioutil"
 
 	//
+	"github.com/tyrchen/podgen/commands"
 	"gopkg.in/yaml.v2"
-	"podgen/commands"
 	"runtime"
 )
 
