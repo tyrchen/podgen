@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/tyrchen/gopod"
 
-	"podgen/utils"
+	"github.com/tyrchen/podgen/utils"
 	"time"
 )
 
