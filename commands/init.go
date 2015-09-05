@@ -105,7 +105,7 @@ func gitCommit(session *sh.Session, message string, branch string, setUpstream b
 
 func getOriginUrl() string {
 	originUrl, err := gitconfig.OriginURL()
-	utils.CheckError(err)
+	utils.CheckError(err, "Please make sure you're in the correct directory, see 'podgen help' for more information.")
 	if !strings.HasPrefix(originUrl, "git@") {
 		log.Printf("Please clone the repo with SSL clone URL. Otherwise the repo cannot be modified (Origin url is %s in .git/config)\n", originUrl)
 		os.Exit(-1)

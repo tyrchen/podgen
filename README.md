@@ -20,11 +20,11 @@ podgen doesn't support windows at this stage. I will finish all the functionalit
 
 ## Usage
 
-To use podgen, first of all, you need to init a site:
+To use podgen, first of all, you need to init a site. Please create a repo in github and close it into your local directory:
 
 ```
-$ mkdir programmer_life
-$ cd programmer_life
+$ git clone git@github.com:yourname/xyz.git
+$ cd xyz
 $ podgen init [--template github.com/tyrchen/podgen-basic]
 ```
 
@@ -57,4 +57,6 @@ $ podgen push -m "add a new episode"
 
 Meanwhile, your itunes podcast app shall get the latest rss. Try it and have fun!
 
-You can always welcome to view a live demo of my podcast site: [programmer life](http://podcast.tchen.me)
+If later on you want to add new episode, just run `podgen new` and it will create new items in your `items.yml`. Just change the title/description and put your music file into `assets` directory and you're all set!
+
+Feel free to view a live demo of my podcast site: [programmer life](http://podcast.tchen.me). It is also available in iTunes/podcast.
