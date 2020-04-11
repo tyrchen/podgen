@@ -12,12 +12,13 @@ import (
 	"gopkg.in/yaml.v2"
 
 	"github.com/codeskyblue/go-sh"
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/cobra"
 	"github.com/tyrchen/gopod"
 
-	"github.com/tyrchen/podgen/utils"
 	"time"
+
+	"github.com/tyrchen/podgen/utils"
 )
 
 type Item struct {
@@ -147,7 +148,8 @@ func generateRss(channel Channel, items []Item) {
 			guid = item.Guid
 		} else {
 			generated_guid = true
-			guid = uuid.NewV4().String()
+			id, _ := uuid.NewV4()
+			guid = id.String()
 			log.Printf("%s -  guid: %s\n", item.Link, guid)
 
 		}

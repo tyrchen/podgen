@@ -2,11 +2,12 @@ package commands
 
 import (
 	"fmt"
-	"github.com/satori/go.uuid"
-	"github.com/spf13/cobra"
 	"log"
 	"os"
 	"time"
+
+	uuid "github.com/satori/go.uuid"
+	"github.com/spf13/cobra"
 
 	"github.com/tyrchen/podgen/utils"
 )
@@ -32,8 +33,8 @@ var newCmd = &cobra.Command{
 		utils.CheckError(err)
 
 		defer f.Close()
-
-		guid := uuid.NewV4().String()
+		id, _ := uuid.NewV4()
+		guid := id.String()
 		pubdate := time.Now().Format(time.RFC3339)
 
 		content := fmt.Sprintf(ITEM_TEMPLATE, pubdate, guid)
